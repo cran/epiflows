@@ -1,8 +1,8 @@
-## ----install2, eval = FALSE----------------------------------------------
+## ----install2, eval = FALSE---------------------------------------------------
 #  if (!require("remotes")) install.packages("remotes", repos = "https://cloud.rstudio.org")
 #  remotes::install_github("reconhub/epiflows")
 
-## ----the_estimate--------------------------------------------------------
+## ----the_estimate-------------------------------------------------------------
 library("epiflows")
 library("ggplot2")
 data("Brazil_epiflows")
@@ -24,7 +24,7 @@ ggplot(res, aes(x = mean_cases, y = location)) +
   xlab("Number of cases") +
   xlim(c(0, NA))
 
-## ----make_epiflows-------------------------------------------------------
+## ----make_epiflows------------------------------------------------------------
 data("YF_locations")
 data("YF_flows")
 data("YF_coordinates")
@@ -45,8 +45,22 @@ ef <- make_epiflows(flows         = YF_flows,
                    )
 ef
 
-## ----plotting------------------------------------------------------------
-vis_epiflows(ef)
-map_epiflows(ef)
+## ----vis_show, eval = FALSE---------------------------------------------------
+#  vis_epiflows(ef)
+
+## ----vis_eval, echo = FALSE---------------------------------------------------
+v <- vis_epiflows(ef)
+v$elementId <- "introduction-epiflows-vis"
+v
+
+## ----map_show, eval = FALSE---------------------------------------------------
+#  map_epiflows(ef)
+
+## ----map_eval, echo = FALSE---------------------------------------------------
+m <- map_epiflows(ef)
+m$elementId <- "introduction-epiflows-map"
+m
+
+## ----grid---------------------------------------------------------------------
 grid_epiflows(ef)
 

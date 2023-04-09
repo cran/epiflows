@@ -1,21 +1,21 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----global_vars---------------------------------------------------------
+## ----global_vars--------------------------------------------------------------
 library("epiflows")
 global_vars()
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library("epiflows")
 data("YF_flows")
 data("YF_locations")
 head(YF_flows)
 YF_locations
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ef <- make_epiflows(flows         = YF_flows, 
                     locations     = YF_locations, 
                     pop_size      = "location_population",
@@ -26,7 +26,7 @@ ef <- make_epiflows(flows         = YF_flows,
                    )
 print(ef)
 
-## ----estimate------------------------------------------------------------
+## ----estimate-----------------------------------------------------------------
 incubation <- function(n) {
   rlnorm(n, 1.46, 0.35)
 }
@@ -42,7 +42,7 @@ res <- estimate_risk_spread(ef,
                             n_sim                  = 1e5)
 res
 
-## ----plot-estimate, fig.width = 7, fig.height = 3------------------------
+## ----plot-estimate, fig.width = 7, fig.height = 3-----------------------------
 library("ggplot2")
 res$location <- factor(rownames(res), rownames(res))
 ggplot(res, aes(x = mean_cases, y = location)) +
@@ -53,7 +53,7 @@ ggplot(res, aes(x = mean_cases, y = location)) +
   xlab("Number of cases") +
   xlim(c(0, NA))
 
-## ----plot-estimate-sim, fig.width = 7, fig.height = 3--------------------
+## ----plot-estimate-sim, fig.width = 7, fig.height = 3-------------------------
 set.seed(2017-07-25)
 res <- estimate_risk_spread(ef, 
                             location_code          = "Espirito Santo",
@@ -73,7 +73,7 @@ ggplot(utils::stack(as.data.frame(res)), aes(x = ind, y = values)) +
   coord_flip()
 
 
-## ----fakedata------------------------------------------------------------
+## ----fakedata-----------------------------------------------------------------
 data("YF_Brazil")
 set.seed(5000)
 short_stays <- as.data.frame(replicate(5, rpois(10, 5) + round(runif(10), 1)))
@@ -81,11 +81,11 @@ colnames(short_stays) <- c("ES", "MG", "RdJ", "SP", "SB")
 rownames(short_stays) <- names(YF_Brazil$length_of_stay)
 short_stays
 
-## ----merge---------------------------------------------------------------
+## ----merge--------------------------------------------------------------------
 short_stays$location_code <- rownames(short_stays)
 (locations <- merge(YF_locations, short_stays, by = "location_code", all = TRUE, sort = FALSE))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ef <- make_epiflows(flows         = YF_flows, 
                     locations     = locations, 
                     pop_size      = "location_population",
@@ -95,7 +95,7 @@ ef <- make_epiflows(flows         = YF_flows,
                     last_date     = "last_date_cases"
                    )
 
-## ----plot-estimate-dummy, fig.width = 7, fig.height = 3------------------
+## ----plot-estimate-dummy, fig.width = 7, fig.height = 3-----------------------
 get_vars(ef)$duration_stay
 set_vars(ef, "duration_stay") <- "ES"
 get_vars(ef)$duration_stay
@@ -122,7 +122,7 @@ ggplot(res, aes(x = mean_cases, y = location)) +
   xlab("Number of cases") +
   xlim(c(0, NA))
 
-## ----plot-estimate-dummy2, fig.width = 7, fig.height = 3-----------------
+## ----plot-estimate-dummy2, fig.width = 7, fig.height = 3----------------------
 
 set_vars(ef, "duration_stay") <- "length_of_stay"
 
@@ -141,7 +141,7 @@ ggplot(res, aes(x = mean_cases, y = location)) +
   xlab("Number of cases") +
   xlim(c(0, NA))
 
-## ----plot-estimate-dummy3, fig.width = 7, fig.height = 3-----------------
+## ----plot-estimate-dummy3, fig.width = 7, fig.height = 3----------------------
 set.seed(2017-07-25)
 res <- estimate_risk_spread(ef, 
                             location_code          = "Espirito Santo",
